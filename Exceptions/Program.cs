@@ -1,4 +1,6 @@
-﻿Console.WriteLine("Hello World!");
+﻿using Exceptions;
+
+Console.WriteLine("Hello World!");
 
 // static ctor
 // StaticClass.StaticProperty = 50;
@@ -25,10 +27,52 @@
 // }
 
 var user = new User();
-
-if (user.MyLogin.Length > User.MaxLoginLength)
+try
 {
+	user.MyLogin = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+	if (user.MyLogin.Length > User.MaxLoginLength)
+	{
+	}
 }
+catch (Exception ex) when (ex is UninitializedMemberException or ArgumentException)
+{
+	Console.WriteLine(ex.Message);
+}
+catch (NotSupportedException)
+{
+	Console.WriteLine("NotSupportedException");
+}
+catch (Exception ex)
+{
+	// Console.WriteLine(ex.Message);
+}
+finally
+{
+	Console.WriteLine("Finnaly");
+}
+// 00001111
+// 0 + 0 + 0 + 0 + 8 + 4 + 2 + 1 = 15
+
+int a = int.MaxValue;
+
+try
+{
+	unchecked
+	{
+		a += 1;
+	}
+}
+catch (OverflowException ex)
+{
+	a = int.MaxValue;
+
+	Console.WriteLine(ex.Message);
+}
+
+// Console.WriteLine("100" + "10"); // 110
+
+Console.WriteLine(a);
 
 // Console.WriteLine(user.MyLogin.Length);
 
@@ -38,41 +82,23 @@ if (user.MyLogin.Length > User.MaxLoginLength)
 // }
 
 
-class User
-{
-	public const int MaxLoginLength = 42;
-
-	private string? _login;
-
-	public string MyLogin
-	{
-		get
-		{
-			if (_login == null)
-			{
-				throw new UninitializedMemberException(nameof(MyLogin));
-			}
-
-			return _login;
-		}
-		set => _login = value;
-	}
-
-	public string? Password { get; set; }
-	public DateTime LastLogin { get; set; }
-}
+// File.Open("file.txt", FileMode.Open);
 
 
-class UninitializedMemberException : Exception
-{
-	private const string DefaultMessage = "Member {0} is uninitialized.";
-	
-	public UninitializedMemberException(string name) : base(string.Format(DefaultMessage, name))
-	{
-	}
-
-	public UninitializedMemberException(string name, Exception? innerException) : base(
-		string.Format(DefaultMessage, name), innerException)
-	{
-	}
-}
+// Finally clause
+// int i = 0;
+//
+// while (true)
+// {
+// 	try
+// 	{
+// 		i++;
+// 	}
+// 	finally
+// 	{
+// 		if (i == 5)
+// 		{
+// 			break;
+// 		}
+// 	}
+// }
