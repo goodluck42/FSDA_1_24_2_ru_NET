@@ -2,13 +2,15 @@
 
 IStock myStock = new Stock();
 
-FileStock.GetTotalCount();
 
 myStock.AddItem(new Item
 {
 	Id = 1,
 	Name = "Tomato",
 	Count = 3
+}, () =>
+{
+	Console.WriteLine("Tomato added");
 });
 
 myStock.AddItem(new Item

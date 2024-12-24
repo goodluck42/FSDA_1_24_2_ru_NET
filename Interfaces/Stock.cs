@@ -14,6 +14,20 @@ class Stock : IStock
 		}
 
 		_items.Add(item);
+		
+		AfterItemAdded?.Invoke();
+	}
+	
+	public void AddItem(Item item, Action afterItemAdded)
+	{
+		if (_items.Any(i => i.Id == item.Id))
+		{
+			return;
+		}
+
+		_items.Add(item);
+		
+		afterItemAdded.Invoke();
 	}
 
 	public bool RemoveItem(int id)
@@ -36,6 +50,8 @@ class Stock : IStock
 		set => _items[index] = value;
 	}
 
+	public Action? AfterItemAdded { get; set; }
+	
 	public static int GetTotalCount()
 	{
 		throw new NotImplementedException();

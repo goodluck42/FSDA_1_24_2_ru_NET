@@ -7,12 +7,21 @@ class FileStock : IStock
 {
 	private const string FileName = "stock.json";
 	private List<Item> _items = [];
-
+	
 	public void AddItem(Item item)
 	{
 		Load();
 		_items.Add(item);
 		Save();
+	}
+	
+	public void AddItem(Item item, Action afterItemAdded)
+	{
+		Load();
+		_items.Add(item);
+		Save();
+		
+		afterItemAdded.Invoke();
 	}
 
 	public bool RemoveItem(int id)
